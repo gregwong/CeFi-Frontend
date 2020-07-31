@@ -7,7 +7,7 @@
  */
 
 import * as React from "react";
-import { AppContextDefault, AppContextState } from './../context/app';
+import { AppContextDefault, AppContextState, Web3State } from './../context/app';
 import Either from './../util/Either';
 
 import Plaid, { PlaidTransaction } from './../models/Plaid';
@@ -33,6 +33,16 @@ const mergeSignInContracts = async (state: AppContextState, updateAppState: Func
   }
 };
 
+const persistWeb3 = async (address: string, updateAppState: Function) => {
+  updateAppState((st: AppContextState) => {
+    st.web3State.address = address;
+    return {
+      ...st,
+      loaded: true,
+    };
+  });
+};
+
 /**
  * Implements the app context hook.
  * @function useAppContext
@@ -45,6 +55,14 @@ export default function useAppContext()  {
     if (!state.web3State.web3) return;
     mergeSignInContracts(state, updateAppState);
   }, [state.web3State?.web3]);
+
+  React.useEffect(() => {
+    if (!state.loaded) {
+      const address = localStorage.getItem('web3State.address');
+      if (address) persistWeb3(address, updateAppState);
+    };
+    localStorage.setItem('web3State.address', state.web3State?.address);
+  }, [state.web3State]);
 
   return [state, updateAppState];
 }

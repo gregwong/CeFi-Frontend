@@ -46,6 +46,7 @@ export interface FicoState {
 }
 
 export interface AppContextState {
+  loaded: boolean;
   plaid: PlaidState;
   fico: FicoState;
   errorModal: ErrorModal;
@@ -63,6 +64,13 @@ export interface AppContextInterface {
  */
 export const AppContextDefault = {
   state: {
+<<<<<<< Updated upstream
+=======
+    loaded: false,
+    dataProviderResponse: {
+      bankInfo: null as null
+    },
+>>>>>>> Stashed changes
     fico: {
       score: null as null,
     },
@@ -78,9 +86,6 @@ export const AppContextDefault = {
         zDai: null as null,
         lendingPool: null as null,
       }
-    },
-    myState: {
-      someproperty: null as null,
     },
     plaid: {
       loggedIn: null as null,
