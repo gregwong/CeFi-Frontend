@@ -1,7 +1,34 @@
 import Notify from "./Web3Notify";
 import ERC20 = require('./../abi/contracts/ERC20Detailed.json');
+import LoansInterface = require('./../abi/contracts/LoansInterface.json');
 import { Web3State } from './../context/app';
-import { globalDecimals } from './../util/constants';
+import { globalDecimals, Address } from './../util/constants';
+import { LoanRequest } from './ArrowheadCRA';
+import { LoanConsensusResponse } from './LoanConsensus';
+
+/**
+ * @name createLoanWithTerms
+ * @desc Sends full loan request with consensus response on-chain.
+ * @param loanRequest - Loan Request data sent from the ArrowheadCRA node.
+ * @param loanConsensusResponses - Collected loan responses from multiple consensus nodes.
+ * @see {@link ArrowheadCRA LoanRequest sendLendingApplication LoanConsensus}
+ * @todo Verify data import into a web3 transaction.
+ */
+export async function createLoanWithTerms(
+  lendingPool: any,
+  primaryAddress: Address,
+  collateralAmount: number,
+  loanConsensusResponses: LoanConsensusResponse[],
+  loanRequest: LoanRequest
+) {
+  return new Promise((resolve, reject) => lendingPool.methods
+    .createLoanWithTerms(loanRequest, loanConsensusResponses, collateralAmount)
+    .send({ from: primaryAddress })
+    .on('transactionHash', Notify.hash)
+    .on('receipt', resolve)
+    .on('error', reject)
+  );
+}
 
 async function getLendingToken(lendingPool: any, web3State: Web3State) {
   const lendingTokenAddress = await lendingPool.methods.lendingToken().call();

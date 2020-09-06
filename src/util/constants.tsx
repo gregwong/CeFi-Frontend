@@ -143,12 +143,19 @@ export const allContractAddresses = {
   }
 };
 
+// @desc Explicit Address alias for an Ethereum address.
+export type Address = string;
+
+// @desc Explicit Signature alias for a cryptographic Signature.
+export type Signature = string;
+
 export const dataProvidersURLs = {
   bankInfo: process.env.DATA_PROVIDERS_URLS_BANK_INFO || '',
 };
 
 export const craURLs = {
   arrowhead: process.env.CRA_URLS_ARROWHEAD || '',
+  consensus: process.env.CRA_URLS_CONSENSUS || '',
 };
 
 export default {
