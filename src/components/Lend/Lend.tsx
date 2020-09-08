@@ -52,7 +52,7 @@ const Lend = () => {
               <Formik
                 initialValues={initialSupplyValues}
                 validate={supplyFormValidation}
-                onSubmit={completeSupply(
+                onSubmit={completeSupply( // TODO replace with dummy func to update state
                   state,
                   updateAppState,
                   setTransactionHash,

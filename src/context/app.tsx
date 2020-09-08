@@ -2,6 +2,7 @@ import * as React from "react";
 import Plaid, { PlaidTransaction } from "./../models/Plaid";
 import { AssetReport } from "plaid";
 import { CollateralAdjustType } from "../components/CollateralAdjustModal";
+import { StatusTypes } from "./types";
 
 interface ErrorModal {
   show: boolean;
@@ -216,7 +217,30 @@ export const AppContextDefault = {
     dummyData: {
       walletBalances: {USDC: 10, DAI: 15, ETH: 12},
       APYs: {USDC: 1, DAI: 5},
-      loans: {},
+      loans: {
+        id: "3143",
+        token: "DAI",
+        collateralToken: "ETH",
+        transactionHash: "0x53c3773356381491d519a4c97a92d633ab496371258aa7d1684dacf44076ce33",
+        terms: {
+          interestRate: 1,
+          collateralRatio: 60,
+          maxLoanAmount: 500,
+          duration: 1,
+          expiryAt: 1598195687893,
+        },
+        startDate: 1598995687893,
+        endDate: 1598195687893,
+        amountBorrowed: 500,
+        status: StatusTypes["Active"],
+        repayments: [{ amount: 1 }],
+        totalRepaidAmount: 0,
+        totalOwedAmount: 500,
+        collateralDeposits: [{ amount: 0.71 }],
+        totalCollateralDepositsAmount: 0.71,
+        collateralWithdrawns: [{ amount: 1 }],
+        totalCollateralWithdrawalsAmount: 0,
+      },
       deposits: {DAI: 20}
     }
   },
