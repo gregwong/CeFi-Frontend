@@ -9,7 +9,7 @@
     "start:dev": "webpack-dev-server --config webpack.development.config.js",
     "start": "node index.js",
     "build:docs": "jsdoc src api -r -d dist/docs --readme README.md -c jsdoc.json",
-    "lint": "eslint --ext .tsx --ext .ts src/ server.js"
+    "lint": "eslint --ext tsx,ts src"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "url": "https://github.com/Zero-Collateral/CeFi-Frontend/issues"
   },
   "engines": {
-    "node": "14.6.0"
+    "node": "14"
   },
   "homepage": "https://github.com/Zero-Collateral/CeFi-Frontend#readme",
   "dependencies": {
