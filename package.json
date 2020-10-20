@@ -9,7 +9,7 @@
     "start:dev": "webpack-dev-server --config webpack.development.config.js",
     "start": "node index.js",
     "build:docs": "jsdoc src api -r -d dist/docs --readme README.md -c jsdoc.json",
-    "lint": "eslint --ext .tsx --ext .ts src/"
+    "lint": "eslint --ext tsx,ts src"
   },
   "repository": {
     "type": "git",
