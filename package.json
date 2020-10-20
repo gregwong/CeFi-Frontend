@@ -9,7 +9,7 @@
     "start:dev": "webpack-dev-server --config webpack.development.config.js",
     "start": "node index.js",
     "build:docs": "jsdoc src api -r -d dist/docs --readme README.md -c jsdoc.json",
-    "lint": "eslint --ext .tsx --ext .ts src/ server.js"
+    "lint": "eslint --ext .tsx --ext .ts src/"
   },
   "repository": {
     "type": "git",
@@ -20,11 +20,12 @@
     "url": "https://github.com/Zero-Collateral/CeFi-Frontend/issues"
   },
   "engines": {
-    "node": "14.6.0"
+    "node": "14"
   },
   "homepage": "https://github.com/Zero-Collateral/CeFi-Frontend#readme",
   "dependencies": {
     "@apollo/client": "^3.2.4",
+    "@bgpc/aws-serverless-toolkit": "1.1.4",
     "@ethersproject/bignumber": "^5.0.7",
     "@ethersproject/contracts": "^5.0.4",
     "@ethersproject/networks": "^5.0.3",
@@ -84,12 +85,15 @@
     "css-loader": "^3.5.3",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-typescript": "^6.3.2",
+    "eslint-config-prettier": "^6.13.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "jsdoc": "^3.6.4",
     "parcel-bundler": "^1.12.4",
+    "prettier": "^2.1.2",
     "source-map-loader": "^0.2.4",
     "terser": "3.14.1",
     "ts-loader": "^6.2.2",
