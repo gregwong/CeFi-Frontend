@@ -12,17 +12,16 @@ const sslRedirect = () => {
       : next();
   };
 };
+
+app.use(sslRedirect());
+app.use(express.static("dist"));
 app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "dist/index.html"), function (err) {
+  res.sendFile(path.join(__dirname, "index.html"), function (err) {
     if (err) {
       res.status(500).send(err);
     }
   });
 });
-
-app.use(sslRedirect());
-app.use(express.static("dist"));
-
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
