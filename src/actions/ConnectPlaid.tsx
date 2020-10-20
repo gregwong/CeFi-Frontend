@@ -7,53 +7,53 @@
  */
 
 import Plaid from "./../models/Plaid";
-import {
-  createPlaidLinkToken,
-  getBankInfo,
-  BankInfoInterface,
-  CreateLinkTokenResponse,
-} from "./../models/DataProviders";
+import { createPlaidLinkToken, submitPlaidPublicToken } from "../services/data-provider";
 import { AppContextState, BankInfoResponseInterface } from "./../context/app";
 
 export default (
   updateAppState: Function,
   address: string | null,
-  setLoading: Function
+  setLoading: Function,
 ) => async () => {
   if (address === null) return;
-  try {
-    const plaidTokenResponse = (await createPlaidLinkToken(
-      address
-    )) as CreateLinkTokenResponse;
-    const token = plaidTokenResponse.data?.linkToken as string;
+  const plaidTokenResponse = await createPlaidLinkToken({ address });
+  if (plaidTokenResponse.error) {
+    switch (plaidTokenResponse.error.code) {
+      case "BAD_REQUEST":
+        break;
+      case "INTERNAL_ERROR":
+        break;
+      case "UNAUTHORIZED":
+        break;
+      case "PROPERTY_FAILS":
+        break;
+    }
+  } else {
+    const { linkToken: token } = plaidTokenResponse.payload;
     const plaidHandler = new Plaid({
       token,
       onLoad: (): any => null,
-      onSuccess: async function (plaid_token: string, metadata: any) {
-        try {
-          const bankInfo = { publicTokens: [plaid_token] } as BankInfoInterface;
-          const bankInfoResponse = await getBankInfo(bankInfo);
-          if (bankInfoResponse.data?.error)
-            throw new Error("Bank Info response failed.");
-          const bankInfoData = bankInfoResponse.data as BankInfoResponseInterface;
-          updateAppState((st: AppContextState) => {
-            const plaid = st.plaid;
-            const dataProviderResponse = st.dataProviderResponse;
-            dataProviderResponse.bankInfo = bankInfoData;
-            plaid.loggedIn = { publicKey: plaid_token, metadata };
-            return { ...st, plaid, dataProviderResponse };
-          });
-          setLoading(false);
-        } catch (err) {
-          setLoading(false);
+      onSuccess: async function (publicToken: string, metadata: any) {
+        const submitPlaidPublicTokenResponse = await submitPlaidPublicToken({
+          address,
+          publicToken,
+        });
+        if (submitPlaidPublicTokenResponse.error) {
           updateAppState((st: AppContextState) => {
             const errorModal = {
               show: true,
-              message:
-                "An error occurred fetching Plaid data. Please try again.",
+              message: "An error occurred fetching Plaid data. Please try again.",
               title: "Error",
             };
             return { ...st, errorModal };
+          });
+        } else {
+          updateAppState((st: AppContextState) => {
+            const plaid = st.plaid;
+            const dataProviderResponse = st.dataProviderResponse;
+            dataProviderResponse.providerTokens = submitPlaidPublicTokenResponse.payload;
+            plaid.loggedIn = { publicKey: publicToken, metadata };
+            return { ...st, plaid, dataProviderResponse };
           });
         }
       },
@@ -63,7 +63,5 @@ export default (
       onEvent: (): any => null,
     });
     plaidHandler.load();
-  } catch (err) {
-    console.log(err);
   }
 };
